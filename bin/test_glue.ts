@@ -1,21 +1,32 @@
 #!/usr/bin/env node
 import 'source-map-support/register';
 import * as cdk from 'aws-cdk-lib';
-import { TestGlueStack } from '../lib/test_glue-stack';
+import { GlueSampleJobStack } from '../lib/test_glue-stack';
+import { getConfig } from '../config';
 
 const app = new cdk.App();
-new TestGlueStack(app, 'TestGlueStack', {
-  /* If you don't specify 'env', this stack will be environment-agnostic.
-   * Account/Region-dependent features and context lookups will not work,
-   * but a single synthesized template can be deployed anywhere. */
 
-  /* Uncomment the next line to specialize this stack for the AWS Account
-   * and Region that are implied by the current CLI configuration. */
-  // env: { account: process.env.CDK_DEFAULT_ACCOUNT, region: process.env.CDK_DEFAULT_REGION },
+// envcode コンテキストから環境を取得
+const envcode = app.node.tryGetContext('envcode');
+if (!envcode) {
+  throw new Error('Please specify environment with -c envcode=dev|stg|prod');
+}
 
-  /* Uncomment the next line if you know exactly what Account and Region you
-   * want to deploy the stack to. */
-  // env: { account: '123456789012', region: 'us-east-1' },
+const config = getConfig(envcode);
 
-  /* For more information, see https://docs.aws.amazon.com/cdk/latest/guide/environments.html */
+const env = {
+  account: process.env.CDK_DEFAULT_ACCOUNT,
+  region: config.region
+};
+
+new GlueSampleJobStack(app, `GlueSampleJobStack-${config.environment}`, {
+  env,
+  config,
+  description: `${config.environment} stack for Glue Python Shell job`,
+  tags: {
+    Environment: config.environment,
+    Project: 'GlueSampleJob'
+  }
 });
+
+app.synth();

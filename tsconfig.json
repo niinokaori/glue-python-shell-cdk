@@ -24,7 +24,11 @@
       "./node_modules/@types"
     ]
   },
-  "exclude": [
+    "paths": {
+      "*": ["*"],
+      "@config/*": ["config/*"]  // 設定ファイルのパスを追加
+    },
+    "exclude": [
     "node_modules",
     "cdk.out"
   ]
