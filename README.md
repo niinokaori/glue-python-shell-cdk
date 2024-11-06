@@ -1,14 +1,12 @@
-# Welcome to your CDK TypeScript project
+## 概要
+Glue Python Shellのジョブを作成し、EventBridgeスケジューラーから実行する環境を構築するCDKです。
 
-This is a blank project for CDK development with TypeScript.
+## 使い方
+- scriptフォルダ配下に置かれた.pyファイルでGlue Python Shellでジョブを作成します。
+- パラメータはconfigディレクトリ配下の.tsファイルに記載します。
+    - 環境ごとにパラメータを分ける場合は`環境名/環境名.ts`ファイルを作成してください。
+- 以下のコードでデプロイします。
+```
+cdk deploy --profile <プロファイル名> -c envcode=<環境名>
+```
 
-The `cdk.json` file tells the CDK Toolkit how to execute your app.
-
-## Useful commands
-
-* `npm run build`   compile typescript to js
-* `npm run watch`   watch for changes and compile
-* `npm run test`    perform the jest unit tests
-* `npx cdk deploy`  deploy this stack to your default AWS account/region
-* `npx cdk diff`    compare deployed stack with current state
-* `npx cdk synth`   emits the synthesized CloudFormation template
